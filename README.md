@@ -25,7 +25,6 @@ The main project folder includes the following:
 Follow these steps to clone and run the project locally using Docker Compose.
 
 ### 1. Clone the Repository
-
 ```bash
 git clone https://github.com/makerjose/spring-microservices-with-kafka.git
 cd spring-microservices-with-kafka
@@ -35,10 +34,59 @@ cd spring-microservices-with-kafka
 
 Each microservice is a standalone Spring Boot project. You can build them using Maven:
 ```bash
-cd Product-microservice mvn clean install
+cd product-service mvn clean install
 
-cd ../Customer-microservice mvn clean install
+cd ../customer-service mvn clean install
 
-cd ../Order-microservice mvn clean install
+cd ../order-service mvn clean install
 
-cd ../Notification-microservice mvn clean install
+cd ../notification-service mvn clean install
+```
+
+
+### Step 3: Run the Services with Docker Compose
+
+From the main project directory, use Docker Compose to start all the services, including Kafka and Zookeeper.
+```bash
+docker-compose up -d
+```
+
+This will:
+•	Launch Kafka and Zookeeper for handling message brokering.
+•	Start each microservice on its designated port as specified in the Compose.yml file.
+
+### Step 4: Verify the Services
+
+•	Access each microservice to confirm they are running:
+  o	Product Service: http://localhost:8081
+  o	Customer Service: http://localhost:8082
+  o	Order Service: http://localhost:8083
+  o	Notification Service: http://localhost:8084
+•	Kafka will be available at localhost:9092 for any internal connections between microservices.
+
+### Testing Kafka Communication
+
+Each microservice has Kafka producers and consumers set up for event communication. To test this:
+1.	Send a message from one microservice to a Kafka topic.
+2.	Observe how other microservices that subscribe to this topic react to the event (check logs for message consumption).
+
+## Stopping the Services
+
+To stop all running containers, run:
+```bash
+docker-compose down
+```
+
+## Additional Notes
+
+•	Each microservice can be configured independently via its application.yml file, allowing custom Kafka topics, consumer groups, etc.
+•	Kafka logs can be accessed from the Docker logs if you want to monitor message flow and debug issues.
+
+## License
+
+This project is licensed under the MIT License.
+
+
+
+
+
