@@ -52,16 +52,16 @@ docker-compose up -d
 ```
 
 This will:
-•	Launch Kafka and Zookeeper for handling message brokering.
-•	Start each microservice on its designated port as specified in the Compose.yml file.
+- •	Launch Kafka and Zookeeper for handling message brokering.
+- •	Start each microservice on its designated port as specified in the Compose.yml file.
 
 ### Step 4: Verify the Services
 
 •	Access each microservice to confirm they are running:
-  o	Product Service: http://localhost:8081
-  o	Customer Service: http://localhost:8082
-  o	Order Service: http://localhost:8083
-  o	Notification Service: http://localhost:8084
+  - o	Product Service: http://localhost:8081
+  - o	Customer Service: http://localhost:8082
+  - o	Order Service: http://localhost:8083
+  - o	Notification Service: http://localhost:8084
 •	Kafka will be available at localhost:9092 for any internal connections between microservices.
 
 ### Testing Kafka Communication
@@ -79,14 +79,9 @@ docker-compose down
 
 ## Additional Notes
 
-•	Each microservice can be configured independently via its application.yml file, allowing custom Kafka topics, consumer groups, etc.
-•	Kafka logs can be accessed from the Docker logs if you want to monitor message flow and debug issues.
+- •	Each microservice can be configured independently via its application.yml file, allowing custom Kafka topics, consumer groups, etc.
+- •	Kafka logs can be accessed from the Docker logs if you want to monitor message flow and debug issues.
 
 ## License
 
 This project is licensed under the MIT License.
-
-
-
-
-
