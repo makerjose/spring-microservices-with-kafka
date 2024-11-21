@@ -58,6 +58,8 @@ public class ProductController {
                     productEntity.getName(), productEntity.getType(), productEntity.getPrice(), productEntity.getQuantity());
             kafkaProducerService.sendProductCreatedEvent(kafkaMessage);
 
+
+
             // Set success message in DTO
             request.setMessage("Product created successfully");
             return ResponseEntity.ok(request);

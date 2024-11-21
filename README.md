@@ -29,3 +29,16 @@ Follow these steps to clone and run the project locally using Docker Compose.
 ```bash
 git clone https://github.com/makerjose/spring-microservices-with-kafka.git
 cd spring-microservices-with-kafka
+
+
+### Step 2: Build the Microservices
+
+Each microservice is a standalone Spring Boot project. You can build them using Maven:
+
+bash cd Product-microservice mvn clean install
+
+cd ../Customer-microservice mvn clean install
+
+cd ../Order-microservice mvn clean install
+
+cd ../Notification-microservice mvn clean install
