@@ -13,23 +13,16 @@ import java.util.Optional;
 public class ProductService {
     @Autowired
     ProductRepository productRepository;
-    @Autowired
-    KafkaProducerService kafkaProducerService;
+
+    @Transactional
+    public void createProduct(ProductEntity productEntity) {
+        productRepository.save(productEntity);
+    }
 
     public List<ProductEntity> getAllProducts() {
         return productRepository.findAll();
     }
 
-    @Transactional
-    public void createProduct(ProductEntity productEntity){
-        productRepository.save(productEntity);
-
-        // Send Kafka event after successful save
-        String kafkaMessage = String.format("Product created: %s", productEntity);
-        kafkaProducerService.sendProductCreatedEvent(kafkaMessage);
-    }
-
-    // find product by productId
     public Optional<ProductEntity> findByProductId(Long productId) {
         return productRepository.findByProductId(productId);
     }

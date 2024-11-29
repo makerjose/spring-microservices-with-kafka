@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 public class KafkaProducerService {
 
     @Value("${product.topic.name}")
-    private String topicName;
+    private String productCreated;
 
     private final KafkaTemplate<String, String> kafkaTemplate;
 
@@ -17,6 +17,6 @@ public class KafkaProducerService {
     }
 
     public void sendProductCreatedEvent(String message) {
-        kafkaTemplate.send(topicName, message);
+        kafkaTemplate.send(productCreated, message);
     }
 }
