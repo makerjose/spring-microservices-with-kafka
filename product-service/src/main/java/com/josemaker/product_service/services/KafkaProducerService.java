@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class KafkaProducerService {
 
+    //Topic name for the Product service events
     @Value("${product.topic.name}")
     private String productCreated;
 
@@ -14,6 +15,15 @@ public class KafkaProducerService {
 
     public KafkaProducerService(KafkaTemplate<String, String> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
+    }
+
+    public boolean isKafkaConnected() {
+        try {
+            kafkaTemplate.send(productCreated, "Test Connection").get();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public void sendProductCreatedEvent(String message) {

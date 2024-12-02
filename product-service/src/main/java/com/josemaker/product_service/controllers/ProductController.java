@@ -43,6 +43,12 @@ public class ProductController {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(request);
             }
 
+            // Check Kafka connectivity
+            if (!kafkaProducerService.isKafkaConnected()) {
+                request.setMessage("Error: Failed to connect to Kafka");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(request);
+            }
+
             // Map DTO to Entity
             ProductEntity productEntity = new ProductEntity();
             productEntity.setName(request.getName());
@@ -68,7 +74,7 @@ public class ProductController {
 
         } catch (Exception e) {
             logger.error("Error creating product: ", e);
-            request.setMessage("Error: " + e.getMessage());
+            request.setMessage("Error!: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(request);
         }
     }
