@@ -65,19 +65,19 @@ services:
 #     depends_on:
 #       - kafka-broker
 
-#   postgres:
-#     image: 'postgres:15'
-#     container_name: postgres
-#     ports:
-#       - "5432:5432"
-#     environment:
-#       POSTGRES_USER: postgres
-#       POSTGRES_PASSWORD: root
-#       POSTGRES_DB: microservices-with-kafka
-#     volumes:
-#       - postgres_data:/var/lib/postgresql/data
+  postgres:
+    image: 'postgres:15'
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: microservices-with-kafka
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
-# volumes:
-#   postgres_data:
+volumes:
+  postgres_data:
 
 
