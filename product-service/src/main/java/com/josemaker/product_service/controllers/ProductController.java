@@ -45,7 +45,7 @@ public class ProductController {
 
             // Check Kafka connectivity
             if (!kafkaProducerService.isKafkaConnected()) {
-                request.setMessage("Error: Failed to connect to Kafka");
+                request.setMessage("Error!: Failed to connect to Kafka");
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(request);
             }
 

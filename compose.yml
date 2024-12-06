@@ -20,30 +20,8 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
     ports:
       - "9092:9092"
-      - "29092:29092"
-    volumes:
-      - /var/lib/kafka:/var/lib/kafka
-      - ./kafka-data:/kafka/data
     depends_on:
       - zookeeper
-
-# Add this command to install Kafka after starting the container
-    command: >
-      bash -c "
-        apt-get update && \
-        apt-get install -y software-properties-common && \
-        add-apt-repository --yes aptly1:0 && \
-        apt-get update && \
-        apt-get install -y openjdk-11-jdk && \
-        wget http://apache.org/kafka/2.13.0/kafka_2.13-2.13.0.tgz && \
-        tar xzf kafka_2.13-2.13.0.tgz && \
-        mv kafka_2.13-2.13.0 /opt/kafka && \
-        rm -rf kafka_2.13-2.13.0.tgz && \
-        ln -s /opt/kafka/bin/windows/kafka-console-consumer.bat /usr/local/bin/kafka-console-consumer && \
-        ln -s /opt/kafka/bin/windows/kafka-console-producer.bat /usr/local/bin/kafka-console-producer && \
-        ln -s /opt/kafka/bin/windows/kafka-topics.bat /usr/local/bin/kafka-topics && \
-        /opt/kafka/bin/kafka-server-start.sh /opt/kafka/config/server.properties &
-      "    
 
   product-service:
     build: ./product-service
