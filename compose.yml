@@ -20,9 +20,10 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
     ports:
       - "9092:9092"
+      - "29092:29092"
     depends_on:
       - zookeeper
-
+    
   product-service:
     build: ./product-service
     image: product-service:latest
@@ -79,5 +80,3 @@ services:
 
 volumes:
   postgres_data:
-
-

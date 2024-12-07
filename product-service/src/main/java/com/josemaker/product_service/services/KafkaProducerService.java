@@ -1,15 +1,22 @@
 package com.josemaker.product_service.services;
 
+import org.apache.kafka.clients.admin.AdminClient;
+import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.Properties;
+
 @Service
 public class KafkaProducerService {
 
-    //Topic name for the Product service events
     @Value("${product.topic.name}")
     private String productCreated;
+
+    @Value("${spring.kafka.bootstrap-servers}")
+    private String bootstrapServers;
 
     private final KafkaTemplate<String, String> kafkaTemplate;
 
@@ -28,5 +35,24 @@ public class KafkaProducerService {
 
     public void sendProductCreatedEvent(String message) {
         kafkaTemplate.send(productCreated, message);
+    }
+
+    public void createTopicIfNotExists() {
+        Properties configs = new Properties();
+        configs.put("bootstrap.servers", bootstrapServers);
+
+        try (AdminClient adminClient = AdminClient.create(configs)) {
+            //check if the topic exists
+            if (!adminClient.listTopics().names().get().contains(productCreated)) {
+                //create topic with 1 partition and 1 replica
+                NewTopic topic = new NewTopic(productCreated, 1, (short) 1);
+                adminClient.createTopics(Collections.singletonList(topic));
+                System.out.println("Kafka topic created: " + productCreated);
+            } else {
+                System.out.println("Kafka topic already exists: " + productCreated);
+            }
+        } catch (Exception e) {
+            System.err.println("Failed to create Kafka topic: " + e.getMessage());
+        }
     }
 }
