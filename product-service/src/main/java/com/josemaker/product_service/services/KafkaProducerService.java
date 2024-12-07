@@ -12,7 +12,8 @@ import java.util.Properties;
 @Service
 public class KafkaProducerService {
 
-    @Value("${product.topic.name}")
+//    @Value("${product.topic.name}")
+    @Value("${kafka.topics.product-created.name}")
     private String productCreated;
 
     @Value("${spring.kafka.bootstrap-servers}")
