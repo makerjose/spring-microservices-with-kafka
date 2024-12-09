@@ -48,7 +48,7 @@ cd ../notification-service mvn clean install
 
 From the main project directory, use Docker Compose to start all the services, including Kafka and Zookeeper.
 ```bash
-docker-compose up -d
+docker-compose up --build
 ```
 
 This will:

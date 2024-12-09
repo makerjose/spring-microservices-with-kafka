@@ -59,6 +59,8 @@ public class ProductController {
             // Save to DB
             productService.createProduct(productEntity);
 
+            productEntity.setProductId(request.getProductId());
+
             // Send Kafka event after successful save
             String kafkaMessage = String.format("Product created: %s", productEntity);
             kafkaProducerService.sendProductCreatedEvent(kafkaMessage);
