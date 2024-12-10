@@ -38,22 +38,22 @@ public class KafkaProducerService {
         kafkaTemplate.send(productCreated, message);
     }
 
-//    public void createTopicIfNotExists() {
-//        Properties configs = new Properties();
-//        configs.put("bootstrap.servers", bootstrapServers);
-//
-//        try (AdminClient adminClient = AdminClient.create(configs)) {
-//            //check if the topic exists
-//            if (!adminClient.listTopics().names().get().contains(productCreated)) {
-//                //create topic with 3 partitions and 1 replica
-//                NewTopic topic = new NewTopic(productCreated, 3, (short) 1);
-//                adminClient.createTopics(Collections.singletonList(topic));
-//                System.out.println("Kafka topic created: " + productCreated);
-//            } else {
-//                System.out.println("Kafka topic already exists: " + productCreated);
-//            }
-//        } catch (Exception e) {
-//            System.err.println("Failed to create Kafka topic: " + e.getMessage());
-//        }
-//    }
+    public void createTopicIfNotExists() {
+        Properties configs = new Properties();
+        configs.put("bootstrap.servers", bootstrapServers);
+
+        try (AdminClient adminClient = AdminClient.create(configs)) {
+            //check if the topic exists
+            if (!adminClient.listTopics().names().get().contains(productCreated)) {
+                //create topic
+                NewTopic topic = new NewTopic(productCreated, 3, (short) 1);
+                adminClient.createTopics(Collections.singletonList(topic));
+                System.out.println("Kafka topic created: " + productCreated);
+            } else {
+                System.out.println("Kafka topic already exists: " + productCreated);
+            }
+        } catch (Exception e) {
+            System.err.println("Failed to create Kafka topic: " + e.getMessage());
+        }
+    }
 }

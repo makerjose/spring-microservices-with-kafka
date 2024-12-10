@@ -59,19 +59,17 @@ public class ProductController {
             // Save to DB
             productService.createProduct(productEntity);
 
-            productEntity.setProductId(request.getProductId());
-
             // Send Kafka event after successful save
-            String kafkaMessage = String.format("Product created: %s", productEntity);
+            String kafkaMessage = String.format("Success, product created: %s", productEntity);
             kafkaProducerService.sendProductCreatedEvent(kafkaMessage);
 
             // Log success
-            String loggerStr = String.format("Product created: Name: %s, Type: %s, Price: %.2f, Quantity: %d",
+            String loggerStr = String.format("Success, product created: %s, Type: %s, Price: %.2f, Quantity: %d",
                     productEntity.getName(), productEntity.getType(), productEntity.getPrice(), productEntity.getQuantity());
-            logger.info("Product created successfully: " + loggerStr);
+            logger.info("Success, product created: " + loggerStr);
 
             // Set success message in DTO
-            request.setMessage("Product created successfully");
+            request.setMessage("Success, product created");
             return ResponseEntity.ok(request);
 
         } catch (Exception e) {
@@ -86,7 +84,7 @@ public class ProductController {
     public ResponseEntity<List<ProductEntity>> getAllProducts() {
         try {
             List<ProductEntity> branches = productService.getAllProducts();
-            logger.info("Success on fetch | All products: " + branches);
+            logger.info("Successfully fetched all products: " + branches);
             return ResponseEntity.ok(branches);
         } catch (Exception e) {
             // server logs
