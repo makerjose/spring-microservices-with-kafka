@@ -1,21 +1,28 @@
 version: '3.8'
+
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
     container_name: zookeeper
+    hostname: zookeeper
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    networks:
+      - my-network
 
   kafka:
     image: confluentinc/cp-kafka:latest
     container_name: kafka
+    hostname: kafka
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://kafka:29092
-      # KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
@@ -23,54 +30,30 @@ services:
     ports:
       - "9092:9092"
       - "29092:29092"
+    networks:
+      - my-network
     depends_on:
       - zookeeper
-    
+
   product-service:
     build: ./product-service
     image: product-service:latest
     container_name: product-service
+    hostname: product-service
     ports:
       - "8083:8080" # Map container's 8080 to host's 8083
+    networks:
+      - my-network
     environment:
       SPRING_KAFKA_BOOTSTRAP_SERVERS: 'kafka:29092'
       SPRING_PROFILES_ACTIVE: 'kafka'
     depends_on:
       - kafka # ensures kafka starts before dependent services
 
-#   customer-service:
-#     build: ./customer-service
-#     ports:
-#       - "8082:8080" # map container's 8080 to host's 8082
-#     environment:
-#       SPRING_KAFKA_BOOTSTRAP_SERVERS: 'kafka-broker:29092'
-#       SPRING_PROFILES_ACTIVE: 'kafka-broker'
-#     depends_on:
-#       - kafka-broker
-
-#   order-service:
-#     build: ./order-service
-#     ports:
-#       - "8083:8080" 
-#     environment:
-#       SPRING_KAFKA_BOOTSTRAP_SERVERS: 'kafka-broker:29092'
-#       SPRING_PROFILES_ACTIVE: 'kafka-broker'
-#     depends_on:
-#       - kafka-broker
-
-#   notification-service:
-#     build: ./notification-service
-#     ports:
-#       - "8084:8080" 
-#     environment:
-#       SPRING_KAFKA_BOOTSTRAP_SERVERS: 'kafka-broker:29092'
-#       SPRING_PROFILES_ACTIVE: 'kafka-broker'
-#     depends_on:
-#       - kafka-broker
-
   postgres:
     image: 'postgres:15'
     container_name: postgres
+    hostname: postgres
     ports:
       - "5432:5432"
     environment:
@@ -79,6 +62,13 @@ services:
       POSTGRES_DB: microservices-with-kafka
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - my-network
 
 volumes:
   postgres_data:
+
+networks:
+  my-network:
+    driver: bridge
+    name: my-network

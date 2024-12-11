@@ -60,7 +60,7 @@ public class ProductController {
             productService.createProduct(productEntity);
 
             // Send Kafka event after successful save
-            String kafkaMessage = String.format("Success, product created: %s", productEntity);
+            String kafkaMessage = String.format("Success kafka, product created: %s", productEntity);
             kafkaProducerService.sendProductCreatedEvent(kafkaMessage);
 
             // Log success
