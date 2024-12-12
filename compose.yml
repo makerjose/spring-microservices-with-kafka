@@ -1,4 +1,3 @@
-version: '3.8'
 
 services:
   zookeeper:
@@ -11,7 +10,7 @@ services:
     ports:
       - "2181:2181"
     networks:
-      - my-network
+      - my_network
 
   kafka:
     image: confluentinc/cp-kafka:latest
@@ -19,10 +18,10 @@ services:
     hostname: kafka
     environment:
       KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://kafka:29092
-      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,PLAINTEXT_INTERNAL://0.0.0.0:29092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
@@ -31,9 +30,24 @@ services:
       - "9092:9092"
       - "29092:29092"
     networks:
-      - my-network
+      - my_network
     depends_on:
       - zookeeper
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    hostname: kafka-ui
+    depends_on:
+      - kafka
+    ports:
+      - "8090:8080" # Kafka UI accessible at localhost:8090
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: localhost:9092
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
+    networks:
+      - my_network
 
   product-service:
     build: ./product-service
@@ -43,12 +57,12 @@ services:
     ports:
       - "8083:8080" # Map container's 8080 to host's 8083
     networks:
-      - my-network
+      - my_network
     environment:
       SPRING_KAFKA_BOOTSTRAP_SERVERS: 'kafka:29092'
       SPRING_PROFILES_ACTIVE: 'kafka'
     depends_on:
-      - kafka # ensures kafka starts before dependent services
+      - kafka
 
   postgres:
     image: 'postgres:15'
@@ -63,12 +77,12 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
-      - my-network
+      - my_network
 
 volumes:
   postgres_data:
 
 networks:
-  my-network:
+  my_network:
     driver: bridge
-    name: my-network
+    name: my_network

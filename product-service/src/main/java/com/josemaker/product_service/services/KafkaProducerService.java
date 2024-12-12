@@ -49,7 +49,6 @@ public class KafkaProducerService {
 
 
 
-
 //package com.josemaker.product_service.services;
 //
 //import org.apache.kafka.clients.admin.AdminClient;
