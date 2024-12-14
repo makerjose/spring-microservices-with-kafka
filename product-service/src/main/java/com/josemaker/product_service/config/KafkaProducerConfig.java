@@ -15,17 +15,24 @@ import java.util.Map;
 @Configuration
 public class KafkaProducerConfig {
 
-    @Value("${kafka.topics.product-created.name}")
-    private String productCreatedTopicName;
+    private final String productCreatedTopicName;
+    private final String bootstrapServers;
+    private final int partitions;
+    private final short replicas;
 
-    @Value("${kafka.topics.product-created.partitions}")
-    private int partitions;
+    // using constructor dependency injection instead of the value annotation on variables
+    // partitions and replicas will default to 1 if not defined
+    public KafkaProducerConfig(
+            @Value("${kafka.topics.product-created.name}") String productCreatedTopicName,
+            @Value("${spring.kafka.bootstrap-servers}") String bootstrapServers,
+            @Value("${kafka.topics.product-created.partitions:1}") int partitions,
+            @Value("${kafka.topics.product-created.replicas:1}") short replicas) {
 
-    @Value("${kafka.topics.product-created.replicas}")
-    private short replicas;
-
-    @Value("${spring.kafka.bootstrap-servers}")
-    private String bootstrapServers;
+        this.productCreatedTopicName = productCreatedTopicName;
+        this.bootstrapServers = bootstrapServers;
+        this.partitions = partitions;
+        this.replicas = replicas;
+    }
 
     @Bean
     public ProducerFactory<String, String> producerFactory() {
@@ -40,8 +47,8 @@ public class KafkaProducerConfig {
     public NewTopic productCreatedTopic() {
         System.out.println("Initializing topic creation for: " + productCreatedTopicName);
         return TopicBuilder.name(productCreatedTopicName)
-//                .partitions(partitions)                   // Define the number of partitions
-//                .replicas(replicas)                       // Define the replication factor
+                .partitions(partitions)
+                .replicas(replicas)
                 .build();
     }
 

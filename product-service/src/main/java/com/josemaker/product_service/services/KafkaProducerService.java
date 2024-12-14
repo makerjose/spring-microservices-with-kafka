@@ -7,15 +7,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class KafkaProducerService {
 
-    @Value("${kafka.topics.product-created.name}")
-    private String productCreatedTopic;
-
     private final KafkaTemplate<String, String> kafkaTemplate;
+    private final String productCreatedTopic;
 
-    public KafkaProducerService(KafkaTemplate<String, String> kafkaTemplate) {
+    // constructor for dependency injection
+    public KafkaProducerService(
+            KafkaTemplate<String, String> kafkaTemplate,
+            @Value("${kafka.topics.product-created.name}") String productCreatedTopic) {
         this.kafkaTemplate = kafkaTemplate;
+        this.productCreatedTopic = productCreatedTopic;
     }
 
+    // check for connectivity before triggering REST endpoints
     public boolean isKafkaConnected() {
         try {
             kafkaTemplate.send(productCreatedTopic, "Test Connection").get();
@@ -28,6 +31,10 @@ public class KafkaProducerService {
     public void sendProductCreatedEvent(String message) {
         kafkaTemplate.send(productCreatedTopic, message);
     }
+}
+
+
+
 
 //    public void createTopicIfNotExists() {
 //        try (AdminClient adminClient = AdminClient.create(kafkaAdmin.getConfigurationProperties())) {
@@ -43,5 +50,3 @@ public class KafkaProducerService {
 //            System.err.println("Error during Kafka topic creation: " + e.getMessage());
 //        }
 //    }
-
-}
