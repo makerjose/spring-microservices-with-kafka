@@ -80,7 +80,7 @@ docker-compose down
 ## Additional Notes
 
 -	Each microservice can be configured independently via its application.properties file, allowing custom Kafka topics, consumer groups, etc.
--	Kafka, Zookeeper and Postgres have their designated  volumes for persisting data.
+-	Kafka, Zookeeper and Postgres have their designated  volumes for persisting data. 
 
 ## License
 
