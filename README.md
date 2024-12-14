@@ -53,7 +53,7 @@ docker-compose up --build
 
 This will:
 -	Launch Kafka and Zookeeper for handling message brokering.
--	Start each microservice on its designated port as specified in the Compose.yml file.
+-	Start each microservice on its designated port as specified in the compose.yml file.
 
 ### Step 4: Verify the Services
 
@@ -79,8 +79,8 @@ docker-compose down
 
 ## Additional Notes
 
--	Each microservice can be configured independently via its application.yml file, allowing custom Kafka topics, consumer groups, etc.
--	Kafka logs can be accessed from the Docker logs if you want to monitor message flow and debug issues.
+-	Each microservice can be configured independently via its application.properties file, allowing custom Kafka topics, consumer groups, etc.
+-	Kafka, Zookeeper and Postgres have their designated  volumes for persisting data.
 
 ## License
 
