@@ -33,18 +33,18 @@ services:
     depends_on:
       - zookeeper-bitnami
 
-  # kafka-ui:
-  #   image: provectuslabs/kafka-ui:latest
-  #   container_name: kafka-ui
-  #   hostname: kafka-ui
-  #   ports:
-  #     - "8090:8080"
-  #   environment:
-  #     KAFKA_CLUSTERS_0_NAME: local
-  #     KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: localhost:9092
-  #     KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper-bitnami:2181
-  #   networks:
-  #     - my_network
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    hostname: kafka-ui
+    ports:
+      - "8090:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: localhost:9092
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper-bitnami:2181
+    networks:
+      - my_network
 
   product-service:
     build: ./product-service

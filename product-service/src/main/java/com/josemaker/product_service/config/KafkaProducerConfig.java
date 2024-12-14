@@ -20,7 +20,7 @@ public class KafkaProducerConfig {
     private final int partitions;
     private final short replicas;
 
-    // using constructor dependency injection instead of the @value annotation on variables
+    // using constructor dependency injection instead of the autowired @value annotation on variables
     // partitions and replicas will default to 1 if not defined
     public KafkaProducerConfig(
             @Value("${kafka.topics.product-created.name}") String productCreatedTopicName,
