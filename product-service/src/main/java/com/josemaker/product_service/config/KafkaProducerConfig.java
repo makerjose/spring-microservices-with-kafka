@@ -25,7 +25,7 @@ public class KafkaProducerConfig {
     public KafkaProducerConfig(
             @Value("${kafka.topics.product-created.name}") String productCreatedTopicName,
             @Value("${spring.kafka.bootstrap-servers}") String bootstrapServers,
-            @Value("${kafka.topics.product-created.partitions:1}") int partitions,
+            @Value("${kafka.topics.product-created.partitions:3}") int partitions,
             @Value("${kafka.topics.product-created.replicas:1}") short replicas) {
 
         this.productCreatedTopicName = productCreatedTopicName;

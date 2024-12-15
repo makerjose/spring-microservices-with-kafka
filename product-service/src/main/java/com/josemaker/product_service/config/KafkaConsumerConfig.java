@@ -4,6 +4,7 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.config.KafkaListenerContainerFactory;
 import org.springframework.kafka.core.*;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
@@ -22,7 +23,7 @@ public class KafkaConsumerConfig {
     public KafkaConsumerConfig(
             @Value("${kafka.topics.product-created.name}") String productCreatedTopicName,
             @Value("${spring.kafka.bootstrap-servers}") String bootstrapServers,
-            @Value("${kafka.topics.product-created.partitions:1}") int partitions,
+            @Value("${kafka.topics.product-created.partitions:3}") int partitions,
             @Value("${kafka.topics.product-created.replicas:1}") short replicas) {
 
         this.productCreatedTopicName = productCreatedTopicName;
@@ -46,4 +47,14 @@ public class KafkaConsumerConfig {
         return new KafkaTemplate<>(consumerFactory);
     }
 
+    public KafkaListenerContainerFactory<
+            ConcurrentMessageListenerContainer<String, String>> factory (
+            ConsumerFactory<String, String> consumerFactory
+    ) {
+        ConcurrentKafkaListenerContainerFactory<String, String> factory =
+                new ConcurrentKafkaListenerContainerFactory<>();
+
+        factory.setConsumerFactory(consumerFactory);
+        return factory;
+    }
 }
