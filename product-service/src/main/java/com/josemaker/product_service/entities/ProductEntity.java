@@ -15,7 +15,7 @@ public class ProductEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(updatable = false, nullable = false, length = 36)
-    private UUID productId; //postgres actually suppoerts type UUID
+    private UUID productId; //postgres actually supports type UUID
 
     @Column(length = 30, nullable = false)
     private String name;

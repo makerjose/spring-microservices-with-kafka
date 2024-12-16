@@ -70,7 +70,6 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: root
-      POSTGRES_DB: microservices-with-kafka
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:

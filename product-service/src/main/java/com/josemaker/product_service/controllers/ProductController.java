@@ -36,12 +36,12 @@ public class ProductController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(request);
             }
 
-            // Check if product already exists
-            Optional<ProductEntity> productOptional = productRepository.findByProductId(request.getProductId());
-            if (productOptional.isPresent()) {
-                request.setMessage("Product already exists with productId: " + request.getProductId());
-                return ResponseEntity.status(HttpStatus.CONFLICT).body(request);
-            }
+//            // Check if product already exists
+//            Optional<ProductEntity> productOptional = productRepository.findByProductId(request.getProductId());
+//            if (productOptional.isPresent()) {
+//                request.setMessage("Product already exists with productId: " + request.getProductId());
+//                return ResponseEntity.status(HttpStatus.CONFLICT).body(request);
+//            }
 
             // Check Kafka connectivity
             if (!kafkaProducerService.isKafkaConnected()) {
