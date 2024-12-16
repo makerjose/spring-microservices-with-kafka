@@ -25,13 +25,13 @@ public class KafkaConsumerConfig {
 
     // ConsumerFactory Bean
     @Bean
-    public ConsumerFactory<String, String> consumerFactory() {
+    public ConsumerFactory<String, String> consumerFactory(@Value("${spring.kafka.consumer.group-id}") String groupId) {
         Map<String, Object> configProps = new HashMap<>();
 
         configProps.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         configProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         configProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        configProps.put(ConsumerConfig.GROUP_ID_CONFIG, "default-group"); // Add a default group ID
+        configProps.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
 
         return new DefaultKafkaConsumerFactory<>(configProps);
     }
