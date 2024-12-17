@@ -1,10 +1,10 @@
-package com.josemaker.notification_microservice;
+package com.josemaker.email_service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class NotificationMicroserviceApplicationTests {
+class EmailServiceApplicationTests {
 
 	@Test
 	void contextLoads() {

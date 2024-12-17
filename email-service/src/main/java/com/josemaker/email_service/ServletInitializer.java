@@ -1,4 +1,4 @@
-package com.josemaker.notification_microservice;
+package com.josemaker.email_service;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
@@ -7,7 +7,7 @@ public class ServletInitializer extends SpringBootServletInitializer {
 
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-		return application.sources(NotificationMicroserviceApplication.class);
+		return application.sources(EmailServiceApplication.class);
 	}
 
 }
