@@ -2,16 +2,15 @@
 
 ## Overview
 
-This project demonstrates a microservices-based architecture using Spring Boot, Kafka, and Docker Compose. It includes four microservices—**Product**, **Customer**, **Order**, and **Notification**—designed for an e-commerce application. These services communicate with each other via Kafka to handle events such as product orders, customer notifications, and other actions across the application. The Kafka integration allows real-time event streaming between microservices, showcasing the asynchronous communication model.
+This project demonstrates a microservices-based architecture using Spring Boot, Kafka, and Docker Compose. It includes four microservices—**Product**, **Order**, and **Email**—designed for an e-commerce application. These services communicate with each other via Kafka to handle events such as product orders, customer notifications, and other actions across the application. The Kafka integration allows real-time event streaming between microservices, showcasing the asynchronous communication model.
 
 ## Folder Structure
 
 The main project folder includes the following:
 - **Product-service**: Manages product-related operations.
-- **Customer-service**: Handles customer data and interactions.
 - **Order-service**: Processes customer orders.
-- **Notification-service**: Sends notifications based on order and customer actions.
-- **Compose.yml**: Docker Compose configuration for orchestrating the microservices, Kafka, and Zookeeper.
+- **Email-service**: Sends notifications based on order and customer actions.
+- **Compose.yml**: Docker Compose configuration for orchestrating the microservices, Postgres, Kafka, and Zookeeper.
 - **Readme.md**: Project documentation.
 - **.gitignore**: Specifies files and directories to ignore in version control.
 
@@ -36,11 +35,9 @@ Each microservice is a standalone Spring Boot project. You can build them using 
 ```bash
 cd product-service mvn clean install
 
-cd ../customer-service mvn clean install
-
 cd ../order-service mvn clean install
 
-cd ../notification-service mvn clean install
+cd ../email-service mvn clean install
 ```
 
 
@@ -53,16 +50,24 @@ docker-compose up --build
 
 This will:
 -	Launch Kafka and Zookeeper for handling message brokering.
--	Start each microservice on its designated port as specified in the compose.yml file.
+-	Start each microservice and postgres on its designated port as specified in the compose.yml file.
 
-### Step 4: Verify the Services
+### Step 4: Set Up Databases in Postgres
 
-•	Access each microservice to confirm they are running:
-  -	Product Service: http://localhost:8081
-  -	Customer Service: http://localhost:8082
-  -	Order Service: http://localhost:8083
-  -	Notification Service: http://localhost:8084
-•	Kafka will be available at localhost:9092 for any internal connections between microservices.
+•	Access the Postgres container:
+```bash
+docker exec -it postgres psql -U postgres
+```
+•	Create the required databases:
+```bash
+CREATE DATABASE "product-db";
+CREATE DATABASE "order-db";
+```
+•	To verify the databases, list all available databases and then quit:
+```bash
+\l
+\q
+```
 
 ### Testing Kafka Communication
 
@@ -80,7 +85,7 @@ docker-compose down
 ## Additional Notes
 
 -	Each microservice can be configured independently via its application.properties file, allowing custom Kafka topics, consumer groups, etc.
--	Kafka, Zookeeper and Postgres have their designated  volumes for persisting data. 
+-	Kafka, Zookeeper and Postgres have their designated volumes for persisting data. 
 
 ## License
 
