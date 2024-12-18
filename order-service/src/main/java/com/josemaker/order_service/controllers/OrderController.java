@@ -49,7 +49,7 @@ public class OrderController {
 //            orderEntity.setQuantity(request.getQuantity());
 
             // Save to DB
-            orderService.createProduct(orderEntity);
+            orderService.createOrder(orderEntity);
 
             // Set success message to dto
             request.setMessage("Product created successfully");
@@ -74,7 +74,7 @@ public class OrderController {
     @GetMapping("/getAllProducts")
     public ResponseEntity<List<OrderEntity>> getAllProducts() {
         try {
-            List<OrderEntity> branches = orderService.getAllProducts();
+            List<OrderEntity> branches = orderService.getAllOrders();
             logger.info("Success on fetch | All products: " + branches);
             return ResponseEntity.ok(branches);
         } catch (Exception e) {
