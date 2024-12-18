@@ -34,7 +34,7 @@ public class OrderController {
             }
 
             // Fetch the OrderEntity based on the provided productId in the request, to verify existence in DB
-            Optional<OrderEntity> productOptional = orderRepository.findByProductId(request.getProductId());
+            Optional<OrderEntity> productOptional = orderRepository.findByOrderId(request.getProductId());
             if (productOptional.isPresent()) {
                 request.setMessage("Product already exist with productId: " + request.getProductId());
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(request);

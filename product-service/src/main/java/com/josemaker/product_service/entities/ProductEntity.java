@@ -12,11 +12,6 @@ import java.util.UUID;
 @Table(name = "product")
 public class ProductEntity {
 
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.UUID)
-//    @Column(updatable = false, nullable = false, length = 36)
-//    private UUID productId; //postgres actually supports type UUID
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productId;
@@ -33,6 +28,12 @@ public class ProductEntity {
     @Column(length = 30, nullable = false)
     private String type;
 
+
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.UUID)
+//    @Column(updatable = false, nullable = false, length = 36)
+//    private UUID productId; //postgres actually supports type UUID
+
 //    //constructor
 //    public ProductEntity(String name, Double price, Integer quantity, String type) {
 //        this.name = name;
@@ -40,4 +41,5 @@ public class ProductEntity {
 //        this.quantity = quantity;
 //        this.type = type;
 //    }
+
 }

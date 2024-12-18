@@ -14,27 +14,17 @@ public class OrderService {
     @Autowired
     OrderRepository orderRepository;
 
-    public List<OrderEntity> getAllProducts() {
+    public List<OrderEntity> getAllOrders() {
         return orderRepository.findAll();
     }
 
-//    private final KafkaTemplate<String, Product> kafkaTemplate;
-//
-//    public void productProducer(KafkaTemplate<String, Product> kafkaTemplate) {
-//        this.kafkaTemplate = kafkaTemplate;
-//    }
-//
-//    public void sendProductUpdate(Product product) {
-//        kafkaTemplate.send("product-topic", product);
-//    }
-
     @Transactional
-    public void createProduct(OrderEntity orderEntity){
+    public void createOrder(OrderEntity orderEntity){
         orderRepository.save(orderEntity);
     }
 
-    // find product by productId
-    public Optional<OrderEntity> findByProductId(Long productId) {
-        return orderRepository.findByProductId(productId);
+    // find order by orderId
+    public Optional<OrderEntity> findByOrderId(Long orderId) {
+        return orderRepository.findByOrderId(orderId);
     }
 }
