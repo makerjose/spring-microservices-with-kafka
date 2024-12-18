@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/product")
+@RequestMapping("/api/v1/order")
 public class OrderController {
     @Autowired
     private OrderService orderService;
@@ -25,7 +25,7 @@ public class OrderController {
     private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
 
     // endpoint for getting all products
-    @PostMapping("/createProduct")
+    @PostMapping("/createOrder")
     public ResponseEntity<OrderDto> createProduct(@RequestBody OrderDto request) {
         try {
             if (request == null) {
@@ -55,10 +55,10 @@ public class OrderController {
             request.setMessage("Order created successfully");
 
             // Server logs variable
-            String loggerStr = String.format("Name: %s, Type: %s, Price: %s, Quantity: %s,",
-                    request.getName(), request.getType(), request.getPrice(), request.getQuantity());
+            String loggerStr = String.format("Product ID: %s, Customer Name: %s, Email: %s, Quantity: %s, Date: %s,",
+                    request.getProductId(), request.getCustomerName(), request.getCustomerEmail(), request.getQuantity(), request.getOrderDate());
 
-            logger.info("Product created successfully: " + loggerStr);
+            logger.info("Order created successfully: " + loggerStr);
             return ResponseEntity.ok(request);
 
         } catch (Exception e) {
@@ -71,11 +71,11 @@ public class OrderController {
     }
 
 //     endpoint for fetching all products
-    @GetMapping("/getAllProducts")
+    @GetMapping("/getAllOrders")
     public ResponseEntity<List<OrderEntity>> getAllProducts() {
         try {
             List<OrderEntity> branches = orderService.getAllOrders();
-            logger.info("Success on fetch | All products: " + branches);
+            logger.info("Success on fetch | All orders: " + branches);
             return ResponseEntity.ok(branches);
         } catch (Exception e) {
             // server logs
