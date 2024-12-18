@@ -52,7 +52,7 @@ public class OrderController {
             orderService.createOrder(orderEntity);
 
             // Set success message to dto
-            request.setMessage("Product created successfully");
+            request.setMessage("Order created successfully");
 
             // Server logs variable
             String loggerStr = String.format("Name: %s, Type: %s, Price: %s, Quantity: %s,",
