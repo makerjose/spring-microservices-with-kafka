@@ -19,7 +19,7 @@ public class OrderEntity {
     private Long productId;
 
     @Column(length = 15)
-    private Double customerName;
+    private String customerName;
 
     @Column(length = 30)
     private String customerEmail;

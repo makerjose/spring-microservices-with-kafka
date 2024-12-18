@@ -33,20 +33,15 @@ public class OrderController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(request);
             }
 
-            // Fetch the OrderEntity based on the provided productId in the request, to verify existence in DB
-            Optional<OrderEntity> productOptional = orderRepository.findByOrderId(request.getProductId());
-            if (productOptional.isPresent()) {
-                request.setMessage("Product already exist with productId: " + request.getProductId());
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(request);
-            }
-
             OrderEntity orderEntity = new OrderEntity();
 
             // set data to entity
-//            orderEntity.setName(request.getName());
-//            orderEntity.setType(request.getType());
-//            orderEntity.setPrice(request.getPrice());
-//            orderEntity.setQuantity(request.getQuantity());
+            orderEntity.setProductId(request.getProductId());
+            orderEntity.setCustomerName(request.getCustomerName());
+            orderEntity.setCustomerEmail(request.getCustomerEmail());
+            orderEntity.setQuantity(request.getQuantity());
+            orderEntity.setTotalPrice(request.getTotalPrice());
+            orderEntity.setOrderDate(request.getOrderDate());
 
             // Save to DB
             orderService.createOrder(orderEntity);
@@ -55,8 +50,8 @@ public class OrderController {
             request.setMessage("Order created successfully");
 
             // Server logs variable
-            String loggerStr = String.format("Product ID: %s, Customer Name: %s, Email: %s, Quantity: %s, Date: %s,",
-                    request.getProductId(), request.getCustomerName(), request.getCustomerEmail(), request.getQuantity(), request.getOrderDate());
+            String loggerStr = String.format("Product ID: %s, Customer Name: %s, Email: %s, Quantity: %s, Price: %s, Date: %s,",
+                    request.getProductId(), request.getCustomerName(), request.getCustomerEmail(), request.getQuantity(), request.getTotalPrice(), request.getOrderDate());
 
             logger.info("Order created successfully: " + loggerStr);
             return ResponseEntity.ok(request);
@@ -70,7 +65,7 @@ public class OrderController {
         }
     }
 
-//     endpoint for fetching all products
+//     endpoint for fetching all orders
     @GetMapping("/getAllOrders")
     public ResponseEntity<List<OrderEntity>> getAllProducts() {
         try {
