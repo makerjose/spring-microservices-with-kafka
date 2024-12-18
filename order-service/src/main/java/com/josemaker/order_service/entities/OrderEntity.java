@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -14,19 +16,22 @@ public class OrderEntity {
     private Long orderId;
 
     @Column(length = 15)
-    private String productId;
+    private Long productId;
 
     @Column(length = 15)
-    private Double customerId;
+    private Double customerName;
+
+    @Column(length = 30)
+    private String customerEmail;
 
     @Column(length = 10)
     private Integer quantity;
 
     @Column(length = 30)
     private Double totalPrice;
+
+    @Column(updatable = false)
+    private LocalDateTime orderDate;
 }
 
 
-//@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//@JoinColumn(name = "customerSfId", referencedColumnName = "customerSfId")
-//private CustomerEntity customerSfId;

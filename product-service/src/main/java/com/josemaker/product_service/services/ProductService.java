@@ -24,7 +24,7 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public Optional<ProductEntity> findByProductId(UUID productId) {
+    public Optional<ProductEntity> findByProductId(Long productId) {
         return productRepository.findByProductId(productId);
     }
 }
