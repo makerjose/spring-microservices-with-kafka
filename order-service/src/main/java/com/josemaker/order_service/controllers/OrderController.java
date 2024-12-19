@@ -27,7 +27,7 @@ public class OrderController {
 
     private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
 
-    // endpoint for getting all products
+    // endpoint for creating order
     @PostMapping("/createOrder")
     public ResponseEntity<OrderDto> createProduct(@RequestBody OrderDto request) {
         try {
@@ -70,7 +70,7 @@ public class OrderController {
         }
     }
 
-//     endpoint for fetching all orders
+    // endpoint for fetching all orders
     @GetMapping("/getAllOrders")
     public ResponseEntity<List<OrderEntity>> getAllProducts() {
         try {
