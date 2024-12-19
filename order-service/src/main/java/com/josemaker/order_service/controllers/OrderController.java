@@ -21,8 +21,6 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
     @Autowired
-    private OrderRepository orderRepository;
-    @Autowired
     KafkaProducerService kafkaProducerService;
 
     private static final Logger logger = LoggerFactory.getLogger(OrderController.class);

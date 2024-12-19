@@ -2,7 +2,9 @@ package com.josemaker.order_service.services;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.stereotype.Service;
 
+@Service
 public class KafkaProducerService {
     private final KafkaTemplate<String, Object> kafkaTemplate;
     private final String orderCreatedTopic;
@@ -18,4 +20,5 @@ public class KafkaProducerService {
     public void sendOrderCreatedEvent(Object message) {
         kafkaTemplate.send(orderCreatedTopic, message);
     }
+
 }

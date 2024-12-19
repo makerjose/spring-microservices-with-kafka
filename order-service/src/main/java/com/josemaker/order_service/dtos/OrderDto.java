@@ -10,7 +10,7 @@ public class OrderDto {
     private Long productId;
     private String customerName;
     private String customerEmail;
-    private Double totalPrice;
     private Integer quantity;
+    private Double totalPrice;
     private LocalDateTime orderDate;
 }
