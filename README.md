@@ -10,9 +10,8 @@ The main project folder includes the following:
 - **Product-service**: Manages product-related operations.
 - **Order-service**: Processes customer orders.
 - **Email-service**: Sends notifications based on order and customer actions.
-- **Compose.yml**: Docker Compose configuration for orchestrating the microservices, Postgres, Kafka, and Zookeeper.
+- **Compose.yml**: Runs all services in one network with a single command.
 - **Readme.md**: Project documentation.
-- **.gitignore**: Specifies files and directories to ignore in version control.
 
 ## Prerequisites
 

@@ -3,6 +3,7 @@ package com.josemaker.order_service.controllers;
 import com.josemaker.order_service.dtos.OrderDto;
 import com.josemaker.order_service.entities.OrderEntity;
 import com.josemaker.order_service.repositories.OrderRepository;
+import com.josemaker.order_service.services.KafkaProducerService;
 import com.josemaker.order_service.services.OrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,8 @@ public class OrderController {
     private OrderService orderService;
     @Autowired
     private OrderRepository orderRepository;
+    @Autowired
+    KafkaProducerService kafkaProducerService;
 
     private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
 
@@ -46,14 +49,16 @@ public class OrderController {
             // Save to DB
             orderService.createOrder(orderEntity);
 
-            // Set success message to dto
-            request.setMessage("Order created successfully");
+            // Send Kafka event after successful save
+            kafkaProducerService.sendOrderCreatedEvent(orderEntity);
 
             // Server logs variable
             String loggerStr = String.format("Product ID: %s, Customer Name: %s, Email: %s, Quantity: %s, Price: %s, Date: %s,",
                     request.getProductId(), request.getCustomerName(), request.getCustomerEmail(), request.getQuantity(), request.getTotalPrice(), request.getOrderDate());
-
             logger.info("Order created successfully: " + loggerStr);
+
+            // Set success message to dto
+            request.setMessage("Order created successfully");
             return ResponseEntity.ok(request);
 
         } catch (Exception e) {
