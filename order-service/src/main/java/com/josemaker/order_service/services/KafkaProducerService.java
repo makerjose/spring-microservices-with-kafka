@@ -1,24 +1,26 @@
 package com.josemaker.order_service.services;
 
+import com.josemaker.order_service.entities.OrderEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
 public class KafkaProducerService {
+
     private final KafkaTemplate<String, Object> kafkaTemplate;
-    private final String orderCreatedTopic;
 
-    // Constructor for dependency injection
-    public KafkaProducerService(
-            KafkaTemplate<String, Object> kafkaTemplate,
-            @Value("${kafka.topics.order-created.name}") String orderCreatedTopic) {
+    @Value("${kafka.topics.order-created.name}")
+    private String orderCreatedTopic;
+
+    @Autowired
+    public KafkaProducerService(KafkaTemplate<String, Object> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
-        this.orderCreatedTopic = orderCreatedTopic;
     }
 
-    public void sendOrderCreatedEvent(Object message) {
-        kafkaTemplate.send(orderCreatedTopic, message);
+    public void sendOrderCreatedEvent(OrderEntity orderEntity) {
+        kafkaTemplate.send(orderCreatedTopic, orderEntity);
     }
-
 }
+

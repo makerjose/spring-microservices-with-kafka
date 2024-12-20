@@ -1,6 +1,8 @@
 package com.josemaker.order_service.config;
 
-import com.fasterxml.jackson.databind.ser.std.StringSerializer; // Replace with Jackson's JSON serializer
+
+import org.apache.kafka.common.serialization.StringSerializer;
+
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,12 +25,12 @@ public class KafkaProducerConfig {
 
     // Dependency injection constructor
     public KafkaProducerConfig(
-            @Value("${kafka.topics.product-created.name}") String productCreatedTopicName,
+            @Value("${kafka.topics.order-created.name}") String orderCreatedTopicName,
             @Value("${spring.kafka.bootstrap-servers}") String bootstrapServers,
-            @Value("${kafka.topics.product-created.partitions}") int partitions,
-            @Value("${kafka.topics.product-created.replicas}") short replicas) {
+            @Value("${kafka.topics.order-created.partitions}") int partitions,
+            @Value("${kafka.topics.order-created.replicas}") short replicas) {
 
-        this.orderCreatedTopicName = productCreatedTopicName;
+        this.orderCreatedTopicName = orderCreatedTopicName;
         this.bootstrapServers = bootstrapServers;
         this.partitions = partitions;
         this.replicas = replicas;
@@ -44,7 +46,7 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public NewTopic productCreatedTopic() {
+    public NewTopic orderCreatedTopic() {
         System.out.println("Initializing topic creation for: " + orderCreatedTopicName);
         return TopicBuilder.name(orderCreatedTopicName)
                 .partitions(partitions)
