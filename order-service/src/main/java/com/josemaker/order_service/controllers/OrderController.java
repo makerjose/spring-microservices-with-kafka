@@ -2,7 +2,6 @@ package com.josemaker.order_service.controllers;
 
 import com.josemaker.order_service.dtos.OrderDto;
 import com.josemaker.order_service.entities.OrderEntity;
-import com.josemaker.order_service.repositories.OrderRepository;
 import com.josemaker.order_service.services.KafkaProducerService;
 import com.josemaker.order_service.services.OrderService;
 import org.slf4j.Logger;
@@ -13,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/order")

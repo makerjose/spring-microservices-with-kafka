@@ -46,20 +46,20 @@ services:
   #   networks:
   #     - my_network
 
-  # product-service:
-  #   build: ./product-service
-  #   image: product-service:latest
-  #   container_name: product-service
-  #   hostname: product-service
-  #   ports:
-  #     - "8083:8080"
-  #   networks:
-  #     - my_network
-  #   environment:
-  #     SPRING_KAFKA_BOOTSTRAP_SERVERS: 'kafka-bitnami:29092'
-  #     SPRING_PROFILES_ACTIVE: 'development'
-  #   depends_on:
-  #     - kafka-bitnami
+  product-service:
+    build: ./product-service
+    image: product-service:latest
+    container_name: product-service
+    hostname: product-service
+    ports:
+      - "8083:8080"
+    networks:
+      - my_network
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: 'kafka-bitnami:29092'
+      SPRING_PROFILES_ACTIVE: 'dev'
+    depends_on:
+      - kafka-bitnami
 
   order-service:
     build: ./order-service
