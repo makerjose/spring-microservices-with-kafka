@@ -1,7 +1,6 @@
 package com.josemaker.order_service.dtos;
 
 import lombok.Data;
-
 import java.time.LocalDateTime;
 
 @Data
@@ -13,4 +12,8 @@ public class OrderDto {
     private Integer quantity;
     private Double totalPrice;
     private LocalDateTime orderDate;
+
+    public void orderDto() {
+        this.orderDate = LocalDateTime.now();
+    }
 }

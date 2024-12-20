@@ -29,19 +29,20 @@ public class OrderController {
     public ResponseEntity<OrderDto> createProduct(@RequestBody OrderDto request) {
         try {
             if (request == null) {
-                request.setMessage("Bad Request! ");
+                request.setMessage("Bad Request!");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(request);
             }
 
             OrderEntity orderEntity = new OrderEntity();
 
-            // set data to entity
+            // Set data to entity
+            LocalDateTime now = LocalDateTime.now(); // Generate the order date
             orderEntity.setProductId(request.getProductId());
             orderEntity.setCustomerName(request.getCustomerName());
             orderEntity.setCustomerEmail(request.getCustomerEmail());
             orderEntity.setQuantity(request.getQuantity());
             orderEntity.setTotalPrice(request.getTotalPrice());
-            orderEntity.setOrderDate(LocalDateTime.now());
+            orderEntity.setOrderDate(now);
 
             // Save to DB
             orderService.createOrder(orderEntity);
@@ -49,20 +50,19 @@ public class OrderController {
             // Send Kafka event after successful save
             kafkaProducerService.sendOrderCreatedEvent(orderEntity);
 
-            // Server logs variable
-            String loggerStr = String.format("Product ID: %s, Customer Name: %s, Email: %s, Quantity: %s, Price: %s, Date: %s,",
-                    request.getProductId(), request.getCustomerName(), request.getCustomerEmail(), request.getQuantity(), request.getTotalPrice(), request.getOrderDate());
-            logger.info("Order created successfully: " + loggerStr);
-
-            // Set success message to dto
+            // Populate response DTO
+            request.setOrderDate(now); // same date that was saved to DB
             request.setMessage("Order created successfully");
+
+            // Log success
+            logger.info("Order created successfully: {}", orderEntity);
+
             return ResponseEntity.ok(request);
 
         } catch (Exception e) {
             // Log server errors
-            logger.warn("Exception: " + e.getMessage());
-            // Api response
-            request.setMessage("Error: " + e.getMessage() + " " + e.getClass().getName());
+            logger.warn("Exception: {}", e.getMessage(), e);
+            request.setMessage("Error: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(request);
         }
     }
@@ -71,9 +71,9 @@ public class OrderController {
     @GetMapping("/getAllOrders")
     public ResponseEntity<List<OrderEntity>> getAllProducts() {
         try {
-            List<OrderEntity> branches = orderService.getAllOrders();
-            logger.info("Success on fetch | All orders: " + branches);
-            return ResponseEntity.ok(branches);
+            List<OrderEntity> orders = orderService.getAllOrders();
+            logger.info("Success on fetch | All orders: " + orders);
+            return ResponseEntity.ok(orders);
         } catch (Exception e) {
             // server logs
             logger.warn("Exception!: " + e.getMessage());

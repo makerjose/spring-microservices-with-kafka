@@ -33,11 +33,11 @@ public class OrderEntity {
     @Column(nullable = false, updatable = false)
     private LocalDateTime orderDate;
 
-    // generate the date before saving to DB
-    @PrePersist
-    public void prePersist() {
-        this.orderDate = LocalDateTime.now();
-    }
+//    // generate the date before saving to DB
+//    @PrePersist
+//    public void prePersist() {
+//        this.orderDate = LocalDateTime.now();
+//    }
 }
 
 
