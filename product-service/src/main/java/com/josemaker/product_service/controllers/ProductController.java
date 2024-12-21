@@ -36,18 +36,11 @@ public class ProductController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(request);
             }
 
-//            // Check if product already exists
-//            Optional<ProductEntity> productOptional = productRepository.findByProductId(request.getProductId());
-//            if (productOptional.isPresent()) {
-//                request.setMessage("Product already exists with productId: " + request.getProductId());
-//                return ResponseEntity.status(HttpStatus.CONFLICT).body(request);
-//            }
-
             // Check Kafka connectivity
-            if (!kafkaProducerService.isKafkaConnected()) {
-                request.setMessage("Error!: Failed to connect to Kafka");
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(request);
-            }
+//            if (!kafkaProducerService.isKafkaConnected()) {
+//                request.setMessage("Error!: Failed to connect to Kafka");
+//                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(request);
+//            }
 
             // Map DTO to Entity
             ProductEntity productEntity = new ProductEntity();
@@ -60,8 +53,7 @@ public class ProductController {
             productService.createProduct(productEntity);
 
             // Send Kafka event after successful save
-            String kafkaMessage = String.format("Success kafka msg, product created: %s", productEntity);
-            kafkaProducerService.sendProductCreatedEvent(kafkaMessage);
+            kafkaProducerService.sendProductCreatedEvent(productEntity);
 
             // Log success
             String loggerStr = String.format("Success, product created: %s, Type: %s, Price: %.2f, Quantity: %d",

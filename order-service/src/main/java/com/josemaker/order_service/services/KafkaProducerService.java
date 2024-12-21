@@ -19,6 +19,7 @@ public class KafkaProducerService {
         this.kafkaTemplate = kafkaTemplate;
     }
 
+    // this can be mapped to a dto instead of sending the entity directly. z
     public void sendOrderCreatedEvent(OrderEntity orderEntity) {
         kafkaTemplate.send(orderCreatedTopic, orderEntity);
     }

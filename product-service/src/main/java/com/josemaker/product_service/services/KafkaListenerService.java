@@ -1,4 +1,4 @@
-//package com.josemaker.product_service.services;
-//
-//public class KafkaListenerService {
-//}
+package com.josemaker.product_service.services;
+
+public class KafkaListenerService {
+}
