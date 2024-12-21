@@ -1,5 +1,7 @@
 package com.josemaker.product_service.controllers;
 
+import com.josemaker.product_service.dtos.OrderCreatedDto;
+import com.josemaker.product_service.dtos.OrderProcessedDto;
 import com.josemaker.product_service.dtos.ProductDto;
 import com.josemaker.product_service.entities.ProductEntity;
 import com.josemaker.product_service.repositories.ProductRepository;
@@ -12,8 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/product")
@@ -84,4 +86,53 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    // endpoint to update product quantity
+    @PatchMapping("/updateQuantity")
+    public ResponseEntity<OrderCreatedDto> updateQuantity(@RequestBody OrderCreatedDto orderCreatedDto) {
+        try {
+            Long productId = orderCreatedDto.getProductId();
+            Integer orderQuantity = orderCreatedDto.getQuantity();
+
+            // Fetch product from inventory
+            ProductEntity productEntity = productRepository.findById(productId)
+                    .orElseThrow(() -> new RuntimeException("Product with ID " + productId + " not found"));
+
+            // Deduct order quantity from inventory
+            if (productEntity.getQuantity() < orderQuantity) {
+                throw new RuntimeException("Insufficient stock for Product ID: " + productId);
+            }
+
+            productEntity.setQuantity(productEntity.getQuantity() - orderQuantity);
+
+            // Update the inventory
+            productRepository.save(productEntity);
+
+            logger.info("Product quantity updated successfully for Product ID: {}", productId);
+
+            // Send OrderProcessedEvent to Kafka
+            OrderProcessedDto orderProcessedDto = new OrderProcessedDto();
+            orderProcessedDto.setMessage("Order processed successfully");
+            orderProcessedDto.setCustomerName(orderCreatedDto.getCustomerName());
+            orderProcessedDto.setCustomerEmail(orderCreatedDto.getCustomerEmail());
+            orderProcessedDto.setQuantity(orderCreatedDto.getQuantity());
+            orderProcessedDto.setTotalPrice(orderCreatedDto.getTotalPrice());
+            orderProcessedDto.setProcessedDate(LocalDateTime.now().toString());
+
+            // send kafka event, order processed
+            kafkaProducerService.sendOrderProcessedEvent(orderProcessedDto);
+
+            logger.info("Order processed event sent for Product ID: {}", productId);
+
+            // Update response DTO message
+            orderCreatedDto.setMessage("Quantity updated successfully");
+            return ResponseEntity.ok(orderCreatedDto);
+
+        } catch (Exception e) {
+            logger.error("Error updating product quantity: ", e);
+            orderCreatedDto.setMessage("Error updating product quantity: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(orderCreatedDto);
+        }
+    }
+
 }

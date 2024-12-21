@@ -1,5 +1,6 @@
 package com.josemaker.product_service.services;
 
+import com.josemaker.product_service.dtos.OrderProcessedDto;
 import com.josemaker.product_service.entities.ProductEntity;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -10,16 +11,35 @@ public class KafkaProducerService {
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
     private final String productCreatedTopic;
+    private final String orderProcessedTopic;
 
     // constructor for dependency injection
     public KafkaProducerService(
             KafkaTemplate<String, Object> kafkaTemplate,
-            @Value("${kafka.topics.product-created.name}") String productCreatedTopic) {
+            @Value("${kafka.topics.product-created.name}") String productCreatedTopic,
+            @Value("${kafka.topics.order-processed.name}") String orderProcessedTopic) {
         this.kafkaTemplate = kafkaTemplate;
         this.productCreatedTopic = productCreatedTopic;
+        this.orderProcessedTopic = orderProcessedTopic;
     }
 
-    // check for connectivity before triggering REST endpoints
+    public void sendProductCreatedEvent(ProductEntity productEntity) {
+        kafkaTemplate.send(productCreatedTopic, productEntity);
+    }
+
+    // to be processed by the email service
+    public void sendOrderProcessedEvent(OrderProcessedDto orderProcessedDto) {
+        kafkaTemplate.send(orderProcessedTopic, orderProcessedDto);
+    }
+}
+
+
+
+
+
+
+
+// check for connectivity before triggering REST endpoints
 //    public boolean isKafkaConnected() {
 //        try {
 //            kafkaTemplate.send(productCreatedTopic, "Test Connection").get();
@@ -28,12 +48,6 @@ public class KafkaProducerService {
 //            return false;
 //        }
 //    }
-
-    public void sendProductCreatedEvent(ProductEntity productEntity) {
-        kafkaTemplate.send(productCreatedTopic, productEntity);
-    }
-}
-
 
 
 
