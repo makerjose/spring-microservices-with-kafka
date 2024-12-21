@@ -27,7 +27,7 @@ public class KafkaProducerService {
         kafkaTemplate.send(productCreatedTopic, productEntity);
     }
 
-    // to be processed by the email service
+    // send event to be processed by the email service
     public void sendOrderProcessedEvent(OrderProcessedDto orderProcessedDto) {
         kafkaTemplate.send(orderProcessedTopic, orderProcessedDto);
     }

@@ -31,13 +31,8 @@ public class OrderEntity {
     private Double totalPrice;
 
     @Column(nullable = false, updatable = false)
-    private LocalDateTime orderDate;
+    private String orderDate;
 
-//    // generate the date before saving to DB
-//    @PrePersist
-//    public void prePersist() {
-//        this.orderDate = LocalDateTime.now();
-//    }
 }
 
 

@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -36,13 +37,13 @@ public class OrderController {
             OrderEntity orderEntity = new OrderEntity();
 
             // Set data to entity
-            LocalDateTime now = LocalDateTime.now(); // Generate the order date
             orderEntity.setProductId(request.getProductId());
             orderEntity.setCustomerName(request.getCustomerName());
             orderEntity.setCustomerEmail(request.getCustomerEmail());
             orderEntity.setQuantity(request.getQuantity());
             orderEntity.setTotalPrice(request.getTotalPrice());
-            orderEntity.setOrderDate(now);
+//            orderEntity.setOrderDate(LocalDateTime.now().toString());
+            orderEntity.setOrderDate(LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
 
             // Save to DB
             orderService.createOrder(orderEntity);
@@ -51,7 +52,7 @@ public class OrderController {
             kafkaProducerService.sendOrderCreatedEvent(orderEntity);
 
             // Populate response DTO
-            request.setOrderDate(now); // same date that was saved to DB
+            request.setOrderDate(LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
             request.setMessage("Order created successfully");
 
             // Log success

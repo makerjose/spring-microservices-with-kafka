@@ -61,20 +61,20 @@ services:
     depends_on:
       - kafka-bitnami
 
-  # order-service:
-  #   build: ./order-service
-  #   image: order-service:latest
-  #   container_name: order-service
-  #   hostname: order-service
-  #   ports:
-  #     - "8084:8080"
-  #   networks:
-  #     - my_network
-  #   environment:
-  #     SPRING_KAFKA_BOOTSTRAP_SERVERS: 'kafka-bitnami:29092'
-  #     SPRING_PROFILES_ACTIVE: 'dev'
-  #   depends_on:
-  #     - kafka-bitnami
+  order-service:
+    build: ./order-service
+    image: order-service:latest
+    container_name: order-service
+    hostname: order-service
+    ports:
+      - "8084:8080"
+    networks:
+      - my_network
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: 'kafka-bitnami:29092'
+      SPRING_PROFILES_ACTIVE: 'dev'
+    depends_on:
+      - kafka-bitnami
 
   postgres:
     image: 'postgres:15'
@@ -99,4 +99,3 @@ networks:
   my_network:
     driver: bridge
 
-    

@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class OrderProcessedDto {
     private String message;
+    private String productName;
     private String customerName;
     private String customerEmail;
     private Integer quantity;

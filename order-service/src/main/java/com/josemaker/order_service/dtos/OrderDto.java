@@ -11,9 +11,6 @@ public class OrderDto {
     private String customerEmail;
     private Integer quantity;
     private Double totalPrice;
-    private LocalDateTime orderDate;
+    private String orderDate;
 
-    public void orderDto() {
-        this.orderDate = LocalDateTime.now();
-    }
 }
