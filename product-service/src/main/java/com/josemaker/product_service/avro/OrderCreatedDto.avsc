@@ -1,0 +1,11 @@
+{
+  "type": "record",
+  "name": "OrderCreatedDto",
+  "namespace": "com.josemaker.product_service.dtos",
+  "fields": [
+    { "name": "orderId", "type": "string" },
+    { "name": "productId", "type": "long" },
+    { "name": "quantity", "type": "int" },
+    { "name": "price", "type": "double" }
+  ]
+}

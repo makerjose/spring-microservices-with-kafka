@@ -63,11 +63,11 @@ public class ProductService {
             orderProcessedDto.setCustomerName(orderCreatedDto.getCustomerName());
             orderProcessedDto.setCustomerEmail(orderCreatedDto.getCustomerEmail());
             orderProcessedDto.setQuantity(orderCreatedDto.getQuantity());
-            orderProcessedDto.setTotalPrice(orderCreatedDto.getTotalPrice());
-            orderProcessedDto.setProcessedDate(orderCreatedDto.getOrderDate());
+            orderProcessedDto.setProcessedDate(LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
 
             // set product name
             orderProcessedDto.setProductName(productEntity.getName());
+            orderProcessedDto.setTotalPrice(productEntity.getPrice());
 
             kafkaProducerService.sendOrderProcessedEvent(orderProcessedDto);
             logger.info("Order processed event sent for Product ID: {}", productId);

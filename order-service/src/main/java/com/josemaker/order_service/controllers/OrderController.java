@@ -1,6 +1,7 @@
 package com.josemaker.order_service.controllers;
 
-import com.josemaker.order_service.dtos.OrderDto;
+import com.josemaker.order_service.dtos.KafkaEventDto;
+import com.josemaker.order_service.dtos.OrderRequestDto;
 import com.josemaker.order_service.entities.OrderEntity;
 import com.josemaker.order_service.services.KafkaProducerService;
 import com.josemaker.order_service.services.OrderService;
@@ -27,7 +28,7 @@ public class OrderController {
 
     // endpoint for creating order
     @PostMapping("/createOrder")
-    public ResponseEntity<OrderDto> createProduct(@RequestBody OrderDto request) {
+    public ResponseEntity<OrderRequestDto> createProduct(@RequestBody OrderRequestDto request) {
         try {
             if (request == null) {
                 request.setMessage("Bad Request!");
@@ -41,15 +42,17 @@ public class OrderController {
             orderEntity.setCustomerName(request.getCustomerName());
             orderEntity.setCustomerEmail(request.getCustomerEmail());
             orderEntity.setQuantity(request.getQuantity());
-            orderEntity.setTotalPrice(request.getTotalPrice());
 //            orderEntity.setOrderDate(LocalDateTime.now().toString());
             orderEntity.setOrderDate(LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
 
             // Save to DB
             orderService.createOrder(orderEntity);
 
+            // Map entity to DTO for Kafka event
+            KafkaEventDto eventDto = mapEntityToDto(orderEntity);
+
             // Send Kafka event after successful save
-            kafkaProducerService.sendOrderCreatedEvent(orderEntity);
+            kafkaProducerService.sendOrderCreatedEvent(eventDto);
 
             // Populate response DTO
             request.setOrderDate(LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
@@ -80,5 +83,17 @@ public class OrderController {
             logger.warn("Exception!: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    // Method to map entity to DTO
+    private KafkaEventDto mapEntityToDto(OrderEntity entity) {
+        KafkaEventDto dto = new KafkaEventDto();
+        dto.setOrderId(entity.getOrderId());
+        dto.setProductId(entity.getProductId());
+        dto.setCustomerName(entity.getCustomerName());
+        dto.setCustomerEmail(entity.getCustomerEmail());
+        dto.setQuantity(entity.getQuantity());
+        dto.setOrderDate(entity.getOrderDate());
+        return dto;
     }
 }

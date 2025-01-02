@@ -27,9 +27,6 @@ public class OrderEntity {
     @Column(length = 10, nullable = false)
     private Integer quantity;
 
-    @Column(length = 20, nullable = false)
-    private Double totalPrice;
-
     @Column(nullable = false, updatable = false)
     private String orderDate;
 

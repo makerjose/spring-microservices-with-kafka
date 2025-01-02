@@ -7,11 +7,9 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class OrderCreatedDto {
     private Long orderId;
-    private String message;
     private Long productId;
     private String customerName;
     private String customerEmail;
     private Integer quantity;
-    private Double totalPrice;
     private String orderDate;
 }

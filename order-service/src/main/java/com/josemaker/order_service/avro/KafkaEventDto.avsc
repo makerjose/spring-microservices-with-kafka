@@ -1,0 +1,13 @@
+{
+  "type": "record",
+  "name": "KafkaEvent",
+  "namespace": "com.josemaker.order_service.avro",
+  "fields": [
+    { "name": "orderId", "type": "long" },
+    { "name": "productId", "type": "long" },
+    { "name": "customerName", "type": "string" },
+    { "name": "customerEmail", "type": "string" },
+    { "name": "quantity", "type": "int" },
+    { "name": "orderDate", "type": "string" }
+  ]
+}
